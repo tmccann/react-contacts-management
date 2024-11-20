@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
+import styles from "../sharedSyles/LayoutShared.module.css";
 import CustomLink from "../ui/CustomLink/CustomLink";
-import styles from "./NavBar.module.css";
 
 const NavBar = () => {
   //set h1 depending on location
@@ -16,7 +16,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav className={styles.nav}>
+    <nav className={`${styles.shared_styles} ${styles.nav}`}>
       <h1>{getPageTitle()}</h1>
       {/* add Links */}
       <ul>
