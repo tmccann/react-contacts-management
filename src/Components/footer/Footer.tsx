@@ -1,9 +1,9 @@
-import styles from "./Footer.module.css";
+import styles from "../sharedSyles/LayoutShared.module.css";
 import CustomLink from "../ui/CustomLink/CustomLink";
 
 const Footer = () => {
   return (
-    <footer className={styles.footer}>
+    <footer className={`${styles.shared_styles} ${styles.footer}`}>
       <p>&copy; {new Date().getFullYear()} Contact Manager</p>
       <ul>
         {/* Nav links will be used thes are temp placeholder */}
@@ -14,7 +14,7 @@ const Footer = () => {
           <CustomLink to="/privacy">Privacy</CustomLink>
         </li>
         <li>
-          <CustomLink to="/terms"> Terms</CustomLink>
+          <CustomLink to="/terms">Terms</CustomLink>
         </li>
       </ul>
     </footer>
