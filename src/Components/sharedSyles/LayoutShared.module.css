@@ -1,6 +1,5 @@
 /* shared styles  */
 .shared_styles {
-  position: sticky;
   background: linear-gradient(45deg, #007bff, #00d4ff);
   color: white;
   padding: 0.5rem;
@@ -25,6 +24,7 @@
 /* nav */
 
 nav.nav {
+  position: sticky;
   top: 0;
   border-radius: 1rem 1rem 0 0;
 }
@@ -35,7 +35,6 @@ nav h1 {
 }
 /* footer */
 footer.footer {
-  bottom: 0;
   border-radius: 0 0 0.5rem 0.5rem;
   font-size: 0.9rem;
 }
