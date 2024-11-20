@@ -1,5 +1,5 @@
 /* Form Wrapper */
-.form_wrapper {
+.form_container {
   display: flex;
   min-height: 600px;
   background-image: url("../../../assets/images/contactFormImagage.jpg");
