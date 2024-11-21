@@ -1,10 +1,26 @@
+import { SubmitHandler, useForm } from "react-hook-form";
 import FormContainer from "../formContainer/FormContainer"; // Wrapper for the form layout
 import styles from "../formStyles/FormStyles.module.css"; // Import the CSS module styles
 
+type Inputs = {
+  name: string;
+  email: string;
+  phone: number;
+  gender: "male" | "female";
+};
+
 const ContactsForm = () => {
+  const {
+    register,
+    handleSubmit,
+    // formState: { errors },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+
   return (
     <FormContainer>
-      <form action="submit" className={styles.form}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         {/* Form Header: Heading for the form */}
         <h2>Add new contact</h2>
 
@@ -12,27 +28,26 @@ const ContactsForm = () => {
         <input
           type="text"
           id="name"
-          name="name"
           className={styles.input} // Styled input field (defined in the CSS module)
           required
+          {...register("name", { required: "Name is required" })}
         />
+
         {/* Input field for the email of the contact */}
         <label htmlFor="email">email</label>
         <input
           type="email"
           id="email"
-          name="email"
           className={styles.input} // Styled input field (defined in the CSS module)
-          required
+          {...register("email", { required: "Email is required" })}
         />
         {/* Input field for the phone of the contact */}
         <label htmlFor="phone">Phone Number</label>
         <input
           type="tel"
           id="phone"
-          name="phone"
           className={styles.input} // Styled input field (defined in the CSS module)
-          required
+          {...register("phone", { required: "Phone is required" })}
         />
 
         {/* Fieldset for gender selection: Grouping radio buttons */}
@@ -41,12 +56,22 @@ const ContactsForm = () => {
           <legend>Gender: </legend>
           <div className={styles.switch}>
             {/* Flex container for radio buttons */}
-            <input type="radio" id="male" value="male" name="gender" />
+            <input
+              type="radio"
+              id="male"
+              value="male"
+              {...register("gender", { required: "gender is required" })}
+            />
             <label htmlFor="male" className={styles.switchLabel}>
               {/* Male radio button label */}
               Male
             </label>
-            <input type="radio" id="female" value="female" name="gender" />
+            <input
+              type="radio"
+              id="female"
+              value="female"
+              {...register("gender", { required: "gender is required" })}
+            />
             <label htmlFor="female" className={styles.switchLabel}>
               {/* Female radio button label */}
               Female

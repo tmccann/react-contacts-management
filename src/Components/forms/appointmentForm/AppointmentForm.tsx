@@ -1,14 +1,28 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { SubmitHandler, useForm } from "react-hook-form";
 import FormContainer from "../formContainer/FormContainer"; // Wrapper for the form layout
 import styles from "../formStyles/FormStyles.module.css"; // Import the CSS module styles
 
+type Inputs = {
+  title: string;
+  contacts: string;
+  date: string;
+  time: number;
+};
+
 const AppointmentForm = () => {
+  const {
+    register,
+    handleSubmit,
+    //  formState: { errors },
+  } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
   return (
     <>
       {/* Main container that holds the form for layout and structure */}
       <FormContainer>
-        <form action="submit" className={styles.form}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           {/* Form Header: Heading for the form */}
           <h2>Book appointment</h2>
 
@@ -17,18 +31,20 @@ const AppointmentForm = () => {
           <input
             type="text"
             id="title"
-            name="title"
             className={styles.input} // Styled input field (defined in the CSS module)
-            required
+            {...register("title", {
+              required: "title is required",
+            })}
           />
 
           {/* Dropdown for selecting an option */}
           <label htmlFor="options">Options</label>
           <select
-            name="contacts"
             id="contacts"
             className={styles.select} // Styled select field
-            required
+            {...register("contacts", {
+              required: "contacts is required",
+            })}
           >
             <option value="">please select a contact</option>
             <option value="contact1">contact 1</option>
@@ -48,15 +64,16 @@ const AppointmentForm = () => {
           {/* Dropdown for selecting an option */}
           <label htmlFor="times">Select an available time</label>
           <select
-            name="times"
             id="times"
             className={styles.select} // Styled select field
-            required
+            {...register("time", {
+              required: "time is required",
+            })}
           >
             <option value="">available times</option>
-            <option value="time1">8:30</option>
-            <option value="time2">9:30</option>
-            <option value="ctime3">10:30</option>
+            <option value="8:30">8:30</option>
+            <option value="9:30">9:30</option>
+            <option value="10:30">10:30</option>
           </select>
 
           {/* Button container: Centers the submit button */}
