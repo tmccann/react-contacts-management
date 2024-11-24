@@ -1,23 +1,38 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import FormContainer from "../formContainer/FormContainer"; // Wrapper for the form layout
 import styles from "../formStyles/FormStyles.module.css"; // Import the CSS module styles
 
-type Inputs = {
+type AppointmentInputProps = {
   title: string;
   contacts: string;
-  date: string;
-  time: number;
+  date: Date;
+  time: string;
 };
+
+let startDate: Date = new Date();
 
 const AppointmentForm = () => {
   const {
     register,
     handleSubmit,
-    //  formState: { errors },
-  } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+    formState: { errors },
+    control,
+  } = useForm<AppointmentInputProps>();
+  const onSubmit: SubmitHandler<AppointmentInputProps> = (data) =>
+    console.log(data);
+
+  const checkDate = (date: Date | null, field: any) => {
+    const today: string = new Date().toLocaleDateString("en-GB");
+    const selectedDate: string | null | undefined =
+      date?.toLocaleDateString("en-GB");
+    today === selectedDate
+      ? console.log(today)
+      : console.log(today, selectedDate);
+    field.onChange(date);
+  };
+
   return (
     <>
       {/* Main container that holds the form for layout and structure */}
@@ -29,6 +44,7 @@ const AppointmentForm = () => {
           {/* Input field for the name of the contact */}
           <label htmlFor="title">title</label>
           <input
+            placeholder="Enter appointment title"
             type="text"
             id="title"
             className={styles.input} // Styled input field (defined in the CSS module)
@@ -36,6 +52,11 @@ const AppointmentForm = () => {
               required: "title is required",
             })}
           />
+
+          {errors.title && (
+            // Styled error
+            <p className={styles.error}>{errors.title.message}</p>
+          )}
 
           {/* Dropdown for selecting an option */}
           <label htmlFor="options">Options</label>
@@ -53,16 +74,32 @@ const AppointmentForm = () => {
           </select>
 
           {/* DatePicker component for selecting date */}
-          <div className={styles.react_datepicker}>
-            {/* Styling for the date picker wrapper */}
-            <label htmlFor="date"> Select an available date</label>
-            <DatePicker
-              placeholderText="Select date and time"
-              dateFormat="dd/MM/yyyy"
-            />
-          </div>
+          {errors.contacts && (
+            <p className={styles.error}>{errors.contacts.message}</p>
+          )}
+          <Controller
+            control={control}
+            name="date"
+            rules={{ required: "please select available date" }}
+            render={({ field }) => (
+              <div className={styles.react_datepicker}>
+                {/* Styling for the date picker wrapper */}
+                <label htmlFor="date"> Select an available date</label>
+                <DatePicker
+                  id="date"
+                  placeholderText="Select date"
+                  dateFormat="dd/MM/yyyy"
+                  onChange={(date) => checkDate(date, field)}
+                  selected={field.value}
+                  minDate={startDate}
+                />
+              </div>
+            )}
+          />
+          {errors.date && <p className={styles.error}>{errors.date.message}</p>}
+
           {/* Dropdown for selecting an option */}
-          <label htmlFor="times">Select an available time</label>
+          <label htmlFor="times">Select a time</label>
           <select
             id="times"
             className={styles.select} // Styled select field
@@ -75,9 +112,12 @@ const AppointmentForm = () => {
             <option value="9:30">9:30</option>
             <option value="10:30">10:30</option>
           </select>
+          {errors.time && (
+            <p className={styles.error}>{errors.time?.message}</p>
+          )}
 
           {/* Button container: Centers the submit button */}
-          <div className={styles.positon_button_center}>
+          <div className={styles.position_button_center}>
             {/* Flexbox container for button centering */}
             <button type="submit" className={styles.button}>
               {/* Submit button styling */}

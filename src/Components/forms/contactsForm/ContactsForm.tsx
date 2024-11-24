@@ -13,6 +13,7 @@ const ContactsForm = () => {
   const {
     register,
     handleSubmit,
+    formState: { errors },
     // formState: { errors },
   } = useForm<Inputs>();
 
@@ -29,10 +30,9 @@ const ContactsForm = () => {
           type="text"
           id="name"
           className={styles.input} // Styled input field (defined in the CSS module)
-          required
           {...register("name", { required: "Name is required" })}
         />
-
+        <p className={styles.error}>{errors.name?.message}</p>
         {/* Input field for the email of the contact */}
         <label htmlFor="email">email</label>
         <input
@@ -41,6 +41,7 @@ const ContactsForm = () => {
           className={styles.input} // Styled input field (defined in the CSS module)
           {...register("email", { required: "Email is required" })}
         />
+        <p className={styles.error}>{errors.email?.message}</p>
         {/* Input field for the phone of the contact */}
         <label htmlFor="phone">Phone Number</label>
         <input
@@ -49,7 +50,7 @@ const ContactsForm = () => {
           className={styles.input} // Styled input field (defined in the CSS module)
           {...register("phone", { required: "Phone is required" })}
         />
-
+        <p className={styles.error}>{errors.phone?.message}</p>
         {/* Fieldset for gender selection: Grouping radio buttons */}
         <fieldset className={styles.fieldset}>
           {/* Fieldset styling for grouping */}
@@ -78,9 +79,10 @@ const ContactsForm = () => {
             </label>
           </div>
         </fieldset>
+        <p className={styles.error}>{errors.gender?.message}</p>
 
         {/* Button container: Centers the submit button */}
-        <div className={styles.positon_button_center}>
+        <div className={styles.position_button_center}>
           {/* Flexbox container for button centering */}
           <button type="submit" className={styles.button}>
             {/* Submit button styling */}
