@@ -42,7 +42,7 @@ const AppointmentForm = () => {
           <h2>Book appointment</h2>
 
           {/* Input field for the name of the contact */}
-          <label htmlFor="title">title</label>
+          <label htmlFor="title">Title</label>
           <input
             placeholder="Enter appointment title"
             type="text"
@@ -55,7 +55,9 @@ const AppointmentForm = () => {
 
           {errors.title && (
             // Styled error
-            <p className={styles.error}>{errors.title.message}</p>
+            <p data-testid="title-error" className={styles.error}>
+              {errors.title.message}
+            </p>
           )}
 
           {/* Dropdown for selecting an option */}
@@ -75,7 +77,9 @@ const AppointmentForm = () => {
 
           {/* DatePicker component for selecting date */}
           {errors.contacts && (
-            <p className={styles.error}>{errors.contacts.message}</p>
+            <p data-testid="contacts-error" className={styles.error}>
+              {errors.contacts.message}
+            </p>
           )}
           <Controller
             control={control}
@@ -96,7 +100,11 @@ const AppointmentForm = () => {
               </div>
             )}
           />
-          {errors.date && <p className={styles.error}>{errors.date.message}</p>}
+          {errors.date && (
+            <p data-testid="date-error" className={styles.error}>
+              {errors.date.message}
+            </p>
+          )}
 
           {/* Dropdown for selecting an option */}
           <label htmlFor="times">Select a time</label>
@@ -113,7 +121,9 @@ const AppointmentForm = () => {
             <option value="10:30">10:30</option>
           </select>
           {errors.time && (
-            <p className={styles.error}>{errors.time?.message}</p>
+            <p data-testid="time-error" className={styles.error}>
+              {errors.time.message}
+            </p>
           )}
 
           {/* Button container: Centers the submit button */}

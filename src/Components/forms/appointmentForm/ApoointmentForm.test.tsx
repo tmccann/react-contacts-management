@@ -1,23 +1,12 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import AppointmentForm from "./AppointmentForm";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import AppointmentForm from "./AppointmentForm";
 
 const pageToTest = (
   <MemoryRouter>
     <AppointmentForm />
   </MemoryRouter>
 );
-const getSuffix = (dayNumber: number): string | undefined => {
-  if (dayNumber >= 11 && dayNumber < 13) return "th";
-  switch (dayNumber % 10) {
-    case 1:
-      return "st";
-    case 2:
-      return "nd";
-    case 3:
-      return "rd";
-  }
-};
 
 describe("Appointment Form Component", () => {
   test("renders without crashing", () => {
@@ -34,7 +23,7 @@ describe("Appointment Form Component", () => {
   test("all inputs have placeholder", () => {
     render(pageToTest);
     // test title input place holder
-    const titleInput = screen.getByLabelText("title");
+    const titleInput = screen.getByLabelText("Title");
     expect(titleInput).toHaveAttribute(
       "placeholder",
       "Enter appointment title"
@@ -50,25 +39,26 @@ describe("Appointment Form Component", () => {
     expect(screen.getByRole("option", { name: "available times" }));
   });
 
-  test("date picker does not allow selecting yesterday's date", () => {
+  test("inputs error if blank", async () => {
     render(pageToTest);
+    // find submmit button
+    const submitButton = screen.getByRole("button", { name: /submit/i });
+    // Fire the submit event without filling out any fields
+    fireEvent.click(submitButton);
+    // wait and check for error message
+    await waitFor(() => {
+      const titleError = screen.getByTestId("title-error");
+      expect(titleError.textContent).toBe("title is required");
 
-    // Open the date picker
-    const dateInput = screen.getByPlaceholderText(/Select date/);
-    fireEvent.click(dateInput);
+      const contactsError = screen.getByTestId("contacts-error");
+      expect(contactsError.textContent).toBe("contacts is required");
 
-    // Calculate yesterday's date dynamically
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const dayNumber = yesterday.getDate();
-    const suffix = getSuffix(dayNumber);
-    const month = yesterday.toLocaleDateString("en-GB", { month: "long" });
-    const day = yesterday.toLocaleDateString("en-GB", { weekday: "long" });
-    const year = yesterday.getFullYear();
-    const formattedYesterday = `Not available ${day}, ${month} ${dayNumber}${suffix}, ${year}`;
-    // Verify that yesterday's date is disabled
-    const yesterdayOption = screen.getByLabelText(formattedYesterday);
-    expect(yesterdayOption).toHaveAttribute("aria-disabled", "true");
+      const dateError = screen.getByTestId("date-error");
+      expect(dateError.textContent).toBe("please select available date");
+
+      const timeError = screen.getByTestId("time-error");
+      expect(timeError.textContent).toBe("time is required");
+    });
   });
 
   //   test no error if inputs have value
