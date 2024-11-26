@@ -61,5 +61,24 @@ describe("Appointment Form Component", () => {
     });
   });
 
-  //   test no error if inputs have value
+  //   test no error when inputs have value
+
+  test("no errors when inputs have value", async () => {
+    render(pageToTest);
+    const titleInput = screen.getByPlaceholderText("Enter appointment title");
+    // title input has value
+    fireEvent.change(titleInput, { target: { value: "test" } });
+    expect(titleInput).toHaveValue("test");
+    //
+
+    const contactSelect = screen.getByLabelText("Options");
+    fireEvent.click(contactSelect);
+    fireEvent.change(contactSelect, { target: { value: "contact1" } });
+    expect(contactSelect).toHaveValue("contact1");
+
+    // Simulate selection
+    const timeSelect = screen.getByLabelText("Select a time");
+    fireEvent.change(timeSelect, { target: { value: "8:30" } });
+    expect(timeSelect).toHaveValue("8:30");
+  });
 });

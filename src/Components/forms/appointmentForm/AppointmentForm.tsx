@@ -63,7 +63,7 @@ const AppointmentForm = () => {
           {/* Dropdown for selecting an option */}
           <label htmlFor="options">Options</label>
           <select
-            id="contacts"
+            id="options"
             className={styles.select} // Styled select field
             {...register("contacts", {
               required: "contacts is required",
