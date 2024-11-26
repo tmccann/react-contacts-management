@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import AppointmentForm from "./AppointmentForm";
 
@@ -15,7 +15,6 @@ describe("test date Picker functions correctly", () => {
   let dateAsNumber: number;
   let allOptions: HTMLElement[];
   let filteredDatePickerOptions: HTMLElement[];
-
   beforeEach(() => {
     render(pageToTest);
     // click date picker input to activate options
@@ -59,7 +58,11 @@ describe("test date Picker functions correctly", () => {
 
   test("when selected correct date is place in react datePicker input box", async () => {
     const selectableDate = screen.getByText(dateAsNumber.toString());
-    const datepickerInputValue = screen.getByPlaceholderText("Select date");
+
+    fireEvent.click(datePickerTrigger);
+    const today = new Date().toLocaleDateString("en-GB");
+    fireEvent.click(selectableDate);
+    expect(datePickerTrigger).toHaveValue(today);
   });
 });
 
