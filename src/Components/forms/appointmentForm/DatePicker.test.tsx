@@ -43,17 +43,20 @@ describe("test date Picker functions correctly", () => {
   });
 
   test("date picker first selectedable value to equal today", () => {
+    // filter option to find first date with aria-disable = false thsi indicates the date is slectable
     const firstSelectableDate = filteredDatePickerOptions.find(
       (option) => option.getAttribute("aria-disabled") === "false"
     );
+    // first selectable date should equal todays date
     expect(firstSelectableDate?.textContent).toBe(dateAsNumber.toString());
   });
 
   test("date before today not to be selectable", () => {
+    // filter options in reverse to find first aria-disabled = true this indactes date is not selectable
     const lastDisabledOption = filteredDatePickerOptions
       .reverse()
       .find((option) => option.getAttribute("aria-disabled") === "true");
-
+    // check last date unselectable is yesterday
     expect(lastDisabledOption?.textContent).toBe((dateAsNumber - 1).toString());
   });
 
