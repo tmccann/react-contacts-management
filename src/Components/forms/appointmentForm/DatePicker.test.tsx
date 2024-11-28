@@ -1,7 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
 import AppointmentForm from "./AppointmentForm";
 
+import { MemoryRouter } from "react-router-dom";
 const pageToTest = (
   <MemoryRouter>
     <AppointmentForm />
@@ -56,12 +57,25 @@ describe("test date Picker functions correctly", () => {
     expect(lastDisabledOption?.textContent).toBe((dateAsNumber - 1).toString());
   });
 
-  test("when selected correct date is place in react datePicker input box", async () => {
-    const selectableDate = screen.getByText(dateAsNumber.toString());
+  test("when selected, the correct date is placed in the date picker input box", async () => {
+    const user = userEvent.setup();
 
-    fireEvent.click(datePickerTrigger);
-    const today = new Date().toLocaleDateString("en-GB");
-    fireEvent.click(selectableDate);
-    expect(datePickerTrigger).toHaveValue(today);
+    // Get the selectable date element
+    const selectableDate = screen.getByText(dateAsNumber.toString(), {
+      selector: "[aria-disabled='false']",
+    });
+
+    // Simulate user opening the date picker
+    await user.click(datePickerTrigger);
+
+    // Format today's date to match the expected display format
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString("en-GB");
+
+    // Simulate selecting today's date
+    await user.click(selectableDate);
+
+    // Assert the input displays the correct date
+    expect(datePickerTrigger).toHaveValue(formattedDate);
   });
 });
