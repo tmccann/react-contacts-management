@@ -116,7 +116,7 @@ const AppointmentForm = () => {
             })}
           >
             <option value="">available times</option>
-            <option value="8:30">8:30</option>
+            <option value="8">8:30</option>
             <option value="9:30">9:30</option>
             <option value="10:30">10:30</option>
           </select>

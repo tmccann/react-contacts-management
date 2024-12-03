@@ -12,10 +12,10 @@ const pageToTest = (
 describe("test date Picker functions correctly", () => {
   // setup shared vairables
 
-  let datePickerTrigger: HTMLElement;
-  let dateAsNumber: number;
-  let allOptions: HTMLElement[];
-  let filteredDatePickerOptions: HTMLElement[];
+  let datePickerTrigger: HTMLElement,
+    dateAsNumber: number,
+    allOptions: HTMLElement[],
+    filteredDatePickerOptions: HTMLElement[];
   beforeEach(() => {
     render(pageToTest);
     // click date picker input to activate options
@@ -64,10 +64,10 @@ describe("test date Picker functions correctly", () => {
     const user = userEvent.setup();
 
     // Get the selectable date element
-    const selectableDate = screen.getByText(dateAsNumber.toString(), {
+    const allDates = screen.getAllByText(dateAsNumber.toString(), {
       selector: "[aria-disabled='false']",
     });
-
+    const selectableDate = allDates[0];
     // Simulate user opening the date picker
     await user.click(datePickerTrigger);
 
