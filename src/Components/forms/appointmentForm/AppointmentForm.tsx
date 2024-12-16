@@ -1,7 +1,7 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import FormContainer from "../formContainer/FormContainer"; // Wrapper for the form layout
+import FormContainer from "../formContainer/FormContainer";
 import styles from "../formStyles/FormStyles.module.css"; // Import the CSS module styles
 
 type AppointmentInputProps = {
@@ -13,15 +13,23 @@ type AppointmentInputProps = {
 
 let startDate: Date = new Date();
 
-const AppointmentForm = () => {
+const AppointmentForm = ({
+  onSubmit,
+}: {
+  onSubmit: SubmitHandler<AppointmentInputProps>;
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
+    reset,
   } = useForm<AppointmentInputProps>();
-  const onSubmit: SubmitHandler<AppointmentInputProps> = (data) =>
-    console.log(data);
+
+  // const onSubmit: SubmitHandler<AppointmentInputProps> = (data) => {
+  //   console.log(data); // Your custom behavior
+  //   reset()
+  // };
 
   const checkDate = (date: Date | null, field: any) => {
     const today: string = new Date().toLocaleDateString("en-GB");
@@ -33,11 +41,19 @@ const AppointmentForm = () => {
     field.onChange(date);
   };
 
+  const actualSubmit: SubmitHandler<AppointmentInputProps> = (data) => {
+    console.log("Form data submitted: ", data); // Log the submitted data
+    reset(); // Optionally reset the form after submission
+  };
+
   return (
     <>
       {/* Main container that holds the form for layout and structure */}
       <FormContainer>
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        <form
+          onSubmit={handleSubmit(onSubmit || actualSubmit)}
+          className={styles.form}
+        >
           {/* Form Header: Heading for the form */}
           <h2>Book appointment</h2>
 
@@ -61,12 +77,12 @@ const AppointmentForm = () => {
           )}
 
           {/* Dropdown for selecting an option */}
-          <label htmlFor="options">Options</label>
+          <label htmlFor="contacts">Contacts</label>
           <select
-            id="options"
+            id="contacts"
             className={styles.select} // Styled select field
             {...register("contacts", {
-              required: "contacts is required",
+              required: "contact is required",
             })}
           >
             <option value="">please select a contact</option>
@@ -90,6 +106,7 @@ const AppointmentForm = () => {
                 {/* Styling for the date picker wrapper */}
                 <label htmlFor="date"> Select an available date</label>
                 <DatePicker
+                  name="date"
                   id="date"
                   placeholderText="Select date"
                   dateFormat="dd/MM/yyyy"
