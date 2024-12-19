@@ -2,22 +2,26 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import FormContainer from "../formContainer/FormContainer"; // Wrapper for the form layout
 import styles from "../formStyles/FormStyles.module.css"; // Import the CSS module styles
 
-type Inputs = {
+type ContactInputProps = {
   name: string;
   email: string;
   phone: number;
   gender: "male" | "female";
 };
 
-const ContactsForm = () => {
+const ContactsForm = ({
+  onSubmit,
+}: {
+  onSubmit: SubmitHandler<ContactInputProps>;
+}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     // formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<ContactInputProps>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  // const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   return (
     <FormContainer>
@@ -48,7 +52,7 @@ const ContactsForm = () => {
           type="tel"
           id="phone"
           className={styles.input} // Styled input field (defined in the CSS module)
-          {...register("phone", { required: "Phone is required" })}
+          {...register("phone", { required: "Phone number is required" })}
         />
         <p className={styles.error}>{errors.phone?.message}</p>
         {/* Fieldset for gender selection: Grouping radio buttons */}
