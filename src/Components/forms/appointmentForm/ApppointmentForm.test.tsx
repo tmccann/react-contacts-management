@@ -115,6 +115,29 @@ describe("AppointmentForm Tests", async () => {
       expect(timeError).not.toBeInTheDocument();
     });
   });
+  describe("date picker has correct dates avaialble", () => {
+    beforeEach(async () => {
+      await user.click(datePickerInput);
+    });
+
+    test("dates in past disabled", async () => {
+      const yesterday = today.getDate() - 1;
+      const allDates = screen.getAllByRole("option");
+      const filterDates = allDates.filter(
+        (option) => option.getAttribute("aria-disabled") === "true"
+      );
+      const firstDisabedDate = filterDates[filterDates.length - 1];
+      expect(firstDisabedDate?.textContent).toBe(yesterday.toString());
+    });
+    test("first avaiable date for selection is today", async () => {
+      const todayNumber = today.getDate();
+      const allDates = screen.getAllByRole("option");
+      const firstAvailableDate = allDates.find(
+        (option) => option.getAttribute("aria-disabled") === "false"
+      );
+      expect(firstAvailableDate?.textContent).toBe(todayNumber.toString());
+    });
+  });
   //   componets error if no value submitted
   describe("inputs error if left blank", () => {
     beforeEach(async () => {
